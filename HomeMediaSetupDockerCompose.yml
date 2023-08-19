@@ -1,0 +1,79 @@
+version: "1.0"
+services:
+  rdtclient:
+    image: rogerfar/rdtclient
+    container_name: rdtclient-container
+    volumes:
+      - /volume1/docker/rdtclient/config:/data/db:rw
+      - /volume1/download/incomplete:/data/downloads:rw      
+    network_mode: 'host'
+    ports:
+      - "6500:6500"
+    environment:
+      - PUID=1030
+      - PGID=100
+  bazarr:
+    image: linuxserver/bazarr
+    container_name: bazarr-container
+    volumes:
+      - /volume1/media/TV Shows:/tv:rw
+      - /volume1/media/Movies:/movies:rw
+      - /volume1/docker/bazarr/config:/config:rw
+    network_mode: 'host'
+    ports:
+      - "6767:6767"
+    environment:
+      - PUID=1030
+      - PGID=100
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett-container
+    volumes:
+      - /volume1/download/torrent-blackhole:/downloads:rw
+      - /volume1/docker/jackett/config:/config:rw
+    network_mode: 'host'
+    ports:
+      - "9117:9117"
+    environment:
+      - PUID=1030
+      - PGID=100
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr-container
+    volumes:
+      - /volume1/download/incomplete:/downloads:rw
+      - /volume1/media/Movies:/movies:rw
+      - /volume1/docker/radarr/config:/config:rw
+    network_mode: 'host'
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1030
+      - GUID=100
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr-container
+    volumes:
+      - /volume1/download/incomplete:/downloads:rw
+      - /volume1/media/TV Shows:/tv:rw
+      - /volume1/docker/sonarr/config:/config:rw
+    network_mode: 'host'
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=1030
+      - PGID=100
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex-container
+    volumes:
+      - /volume1/media:/media:rw
+      - /volume1/docker/plex/transcode:/transcode:rw
+      - /volume1/docker/plex/config:/config:rw
+      - /volume1/docker/plex/data:/data:rw
+    network_mode: 'host'
+    ports:
+      - "32400:32400"
+    environment:
+      - PUID=1028
+      - GUID=100
